@@ -51,7 +51,7 @@
 
 (defun slot->write-value (spec stream)
   (destructuring-bind (name (type &rest args)) (normalize-slot-spec spec)
-    `(setf ,name (write-value ',type ,stream ,name ,@args))))
+    `(write-value ',type ,stream ,name ,@args)))
 
 (defmacro with-gensyms ((&rest names) &body body)
   `(let ,(loop for n in names collect `(,n (gensym)))
@@ -74,7 +74,6 @@
 ;; we would use to set the plist
 (defun new-class-all-slots (slots superclasses)
   (nconc (mapcan #'all-slots superclasses) (mapcar #'first slots)))
-
 
 
 
