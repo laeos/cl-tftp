@@ -1,0 +1,6 @@
+2004-11-25  Rex Feany  <laeos@laeos.net>
+
+	* todo: new todo list
+
+	* binary.lisp, cl-tftp.asd, cl-tftp.lisp, package.lisp: first commit
+
