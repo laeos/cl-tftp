@@ -7,6 +7,7 @@ RM=rm -f
 
 DISTFILE=cl-tftp-$(VERS).tar.gz
 VERSION_BIT=-n CL-TFTP -p CL-TFTP -l txt version.txt
+PROJECT=cl-tftp
 
 VERS:=$(shell shtool version -d short $(VERSION_BIT))
 
@@ -19,8 +20,11 @@ fixperm:
 setv:
 	$(SHTOOL) subst -e "s;:version.*;:version \"$(VERS)\";" cl-tftp.asd
 
-version:
-	@echo "This CL-TFTP is version $(VERS)".
+project:
+	@echo $(PROJECT)
+
+version: 
+	@echo $(VERS)
 
 tag:
 	tag=`echo CL_TFTP_$(VERS) | sed -e 's/\./_/g' -e 's/-/_/g'`; \
@@ -28,7 +32,7 @@ tag:
 
 dist: clean fixperm setv
 	shtool tarball -v -o $(DISTFILE) -c 'gzip -9' \
-	    -e 'CVS,\.cvsignore,makefile,version.txt,*.tar.gz,*.fasl,*~' .
+	    -e 'CVS,\.cvsignore,makefile,version.txt,*.tar.gz,*.fasl,*~,.*.swp' .
 
 sign: dist
 	gpg -b -a $(DISTFILE)
