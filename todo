@@ -1,5 +1,4 @@
 TODO:
-   fix braindead timeout handling (commented out cuz its broken)
    do tftp server
    callback for status infos
    asdf-install'able?
