@@ -1,4 +1,12 @@
-2004-11-25  Rex Feany  <laeos@laeos.net>
+2004-11-24  Rex Feany  <rfeany@nell.ark.laeos.net>
+
+	* binary.lisp: removed a setf in write-value that should not have
+	been there and was causing all kinds of bad things to happen.
+
+	* cl-tftp.lisp: removed todo list into.. todo.  fixed timeout
+	handling, now things will actually timeout and signal timeout.
+
+2004-11-24  Rex Feany  <laeos@laeos.net>
 
 	* todo: new todo list
 
