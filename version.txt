@@ -1,0 +1,6 @@
+
+  version.txt -- Version Information for CL-TFTP (syntax: Text)
+  [automatically generated and maintained by GNU shtool]
+
+  This is CL-TFTP, Version 1.0.0 (24-Nov-2004)
+

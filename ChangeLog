@@ -1,4 +1,8 @@
-2004-11-24  Rex Feany  <rfeany@nell.ark.laeos.net>
+2004-11-24  Rex Feany  <laeos@laeos.net>
+
+	* makefile: setup for packaging, etc.
+
+2004-11-24  Rex Feany  <laeos@laeos.net>
 
 	* binary.lisp: removed a setf in write-value that should not have
 	been there and was causing all kinds of bad things to happen.

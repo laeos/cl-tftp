@@ -14,7 +14,7 @@
 (defsystem #:cl-tftp
     :name "cl-tftp"
     :author "Rex Feany"
-    :version "0.0.0"
+    :version "1.0.0"
     :description "Common Lisp interface to the TFTP protocol."
     :depends-on
        #+sbcl (:sb-bsd-sockets)
