@@ -8,14 +8,6 @@
 ;;;; It is pretty broken though, I can't figure out how
 ;;;; to do a sendmsg without connecting the socket.
 ;;;;
-;;;;
-;;;; TODO:
-;;;;   fix braindead timeout handling (commented out cuz its broken)
-;;;;   do tftp server
-;;;;   callback for status infos
-;;;;   asdf package
-;;;;   asdf-install'able?
-;;;;
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
     (require 'sb-bsd-sockets)
@@ -216,7 +208,6 @@
 	(write-sequence buffer stream)
 	(error "TFTP could not write block number ~D" blocknum))))
 
-
 (defun send-to (socket stream host port packet)
   (socket-connect socket host port)
   (write-object packet stream)
@@ -249,17 +240,14 @@
 
 (defun request-reply (session packet)
   "Send the current packet, return reply or timeout"
-  (flet ((try-once ()
-	   (send-packet session packet)
-	   (recv-packet session)))
-    (try-once)))
-    
-
-;    (dotimes (count (1- (sess-retries session)))
-;      (handler-bind ((timeout #'(lambda (x) (declare (ignore x)) (go again))))
-;	(return (try-once)))
-;      again)
-;    (try-once))) ; one more try. let it throw timeout.
+  (dotimes (count (1+ (sess-retries session)))
+    (handler-case
+	(progn
+	  (send-packet session packet)
+	  (with-timeout (sess-timeout session)
+	    (return-from request-reply (recv-packet session))))
+      (timeout () nil)))
+  (error 'timeout))
 
 (defun sending-file-p (session)
   "Return true if this is a put session."
@@ -311,10 +299,9 @@
 
 (defun finish-getting-file (session packet)
   "Wait to see if the other guy got our last ack."
-)
-;  (handler-case
-;      (request-reply session packet)
-;    (timeout () nil)))
+  (handler-case
+      (request-reply session packet)
+    (timeout () nil)))
 
 (defun client-loop (session)
   "request, reply. request, reply. Will the work never end?"
