@@ -2,3 +2,5 @@ TODO:
    do tftp server
    callback for status infos
    asdf-install'able?
+   more generic sockets layer
+   speed it up a little bit
