@@ -4,21 +4,15 @@
 
 SHTOOL=shtool
 RM=rm -f
-
 DISTFILE=cl-tftp-$(VERS).tar.gz
-VERSION_BIT=-n CL-TFTP -p CL-TFTP -l txt version.txt
 PROJECT=cl-tftp
-
-VERS:=$(shell shtool version -d short $(VERSION_BIT))
+VERS:=$(shell sed -ne '/:version/ { s/^.* "\(.*\)"$$/\1/p }' cl-tftp.asd)
 
 clean:
 	$(RM) *.fasl *.~
 
 fixperm:
 	$(SHTOOL) fixperm -v * 
-
-setv:
-	$(SHTOOL) subst -e "s;:version.*;:version \"$(VERS)\";" cl-tftp.asd
 
 project:
 	@echo $(PROJECT)
@@ -27,22 +21,12 @@ version:
 	@echo $(VERS)
 
 tag:
-	tag=`echo CL_TFTP_$(VERS) | sed -e 's/\./_/g' -e 's/-/_/g'`; \
-	cvs tag $$tag
+	svn cp $(cltftp)/trunk $(cltftp)/tags/cl-tftp-$(VERS)
 
-dist: clean fixperm setv
+dist: clean fixperm 
 	shtool tarball -v -o $(DISTFILE) -c 'gzip -9' \
-	    -e 'CVS,\.cvsignore,makefile,version.txt,*.tar.gz,*.fasl,*~,.*.swp' .
+	    -e 'CVS,\.svn,\.cvsignore,makefile,version.txt,*.tar.gz,*.fasl,*~,.*.swp' .
 
 sign: dist
 	gpg -b -a $(DISTFILE)
 	md5sum $(DISTFILE) > $(DISTFILE).md5
-
-new-version:
-	$(SHTOOL) version -iv  $(VERSION_BIT)
-
-new-release:
-	$(SHTOOL) version -ir  $(VERSION_BIT)
-
-new-patch:
-	$(SHTOOL) version -il  $(VERSION_BIT)
